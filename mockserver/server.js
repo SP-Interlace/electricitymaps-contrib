@@ -11,22 +11,22 @@ app.use(cors());
 
 const DEFAULT_ZONE_KEY = 'DE';
 
-app.get('/v8/details/:aggregate/:zoneId', (req, res, next) => {
+app.get('/v10/details/:aggregate/:zoneId', (req, res, next) => {
   const { aggregate, zoneId } = req.params;
 
   // if file exists return it, otherwise redirect to DEFAULT file
-  if (fs.existsSync(`./public/v8/details/${aggregate}/${zoneId}.json`)) {
+  if (fs.existsSync(`./public/v10/details/${aggregate}/${zoneId}.json`)) {
     // file structure of project will return the correct file
     next();
   } else {
-    res.redirect(`/v8/details/${aggregate}/${DEFAULT_ZONE_KEY}`);
+    res.redirect(`/v10/details/${aggregate}/${DEFAULT_ZONE_KEY}`);
   }
 });
 
-app.get('/v8/gfs/wind', (req, res, next) => {
+app.get('/v10/gfs/wind', (req, res, next) => {
   const { refTime, targetTime } = req.query;
 
-  fs.readFile(`./public/v8/gfs/wind.json`, (err, data) => {
+  fs.readFile(`./public/v10/gfs/wind.json`, (err, data) => {
     const jsonData = JSON.parse(data);
     jsonData.data[0].header.refTime = targetTime;
 
@@ -34,10 +34,10 @@ app.get('/v8/gfs/wind', (req, res, next) => {
   });
 });
 
-app.get('/v8/gfs/solar', (req, res, next) => {
+app.get('/v10/gfs/solar', (req, res, next) => {
   const { refTime, targetTime } = req.query;
 
-  fs.readFile(`./public/v8/gfs/solar.json`, (err, data) => {
+  fs.readFile(`./public/v10/gfs/solar.json`, (err, data) => {
     const jsonData = JSON.parse(data);
     jsonData.data[0].header.refTime = targetTime;
 
@@ -58,6 +58,6 @@ app.use(function (req, res, next) {
 
 app.use(express.static('public', { extensions: ['json'] }));
 
-const server = app.listen(PORT, HOST, () => {
+app.listen(PORT, HOST, () => {
   console.log(`mockserver running at: http://${HOST}:${PORT}/`);
 });
